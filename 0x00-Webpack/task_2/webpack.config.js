@@ -1,7 +1,5 @@
-// task_2/webpack.config.js
 const path = require('path');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const ImageMinimizerPlugin = require('image-minimizer-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   mode: 'production',
@@ -9,27 +7,29 @@ module.exports = {
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'public'),
+    clean: true,
   },
   module: {
     rules: [
       {
-        test: /\.css$/i,
-        use: [MiniCssExtractPlugin.loader, 'css-loader'],
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader'],
       },
       {
-        test: /\.(png|jpe?g|gif|svg)$/i,
-        type: 'asset/resource',
-        generator: {
-          filename: 'images/[name][ext]',
-        },
+        test: /\.(png|jpe?g|gif)$/i,
         use: [
           {
-            loader: ImageMinimizerPlugin.loader,
+            loader: 'url-loader',
             options: {
-              severityError: 'warning', // You can change the level of messages to error, warning, info or none
-              minimizerOptions: {
-                plugins: ['optipng'],
-              },
+              limit: 8192,
+              name: '[name].[ext]',
+              outputPath: 'images',
+            },
+          },
+          {
+            loader: 'image-webpack-loader',
+            options: {
+              disable: false, // Change to false for image optimization
             },
           },
         ],
@@ -37,8 +37,8 @@ module.exports = {
     ],
   },
   plugins: [
-    new MiniCssExtractPlugin({
-      filename: 'bundle.css',
+    new HtmlWebpackPlugin({
+      template: './public/index.html',
     }),
   ],
 };
