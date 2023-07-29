@@ -1,26 +1,34 @@
+// App.test.js
 import React from "react";
+import { shallow } from "enzyme"; // If you're using Enzyme for shallow rendering
 import App from "./App";
-import { shallow } from "enzyme";
+import Header from "./Header";
+import Login from "./Login";
+import Footer from "./Footer";
 
-describe("App tests", () => {
+describe("App Component", () => {
   it("renders without crashing", () => {
-    const component = shallow(<App />);
-
-    expect(component).toBeDefined();
+    const wrapper = shallow(<App />);
+    expect(wrapper).toMatchSnapshot();
   });
-  // it('should render a div with the class App-header', () => {
-  // 	const component = shallow(<App />);
 
-  // 	expect(component.find('.App-header')).toBeDefined();
-  // });
-  // it('should render a div with the class App-body', () => {
-  // 	const component = shallow(<App />);
+  it("contains the Notifications component", () => {
+    const wrapper = shallow(<App />);
+    expect(wrapper.find("Notifications")).toHaveLength(1);
+  });
 
-  // 	expect(component.find('.App-body')).toBeDefined();
-  // });
-  // it('should render a div with the class App-footer', () => {
-  // 	const component = shallow(<App />);
+  it("contains the Header component", () => {
+    const wrapper = shallow(<App />);
+    expect(wrapper.containsMatchingElement(<Header />)).toEqual(true);
+  });
 
-  // 	expect(component.find('.App-footer')).toBeDefined();
-  // });
+  it("contains the Login component", () => {
+    const wrapper = shallow(<App />);
+    expect(wrapper.containsMatchingElement(<Login />)).toEqual(true);
+  });
+
+  it("contains the Footer component", () => {
+    const wrapper = shallow(<App />);
+    expect(wrapper.containsMatchingElement(<Footer />)).toEqual(true);
+  });
 });
